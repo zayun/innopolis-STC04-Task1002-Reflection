@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Human>
+    <field name="name" type="String" value="Egor"/>
+    <field name="age" type="Integer" value="30"/>
+    <field name="salary" type="double" value="50.5"/>
+</Human>
