@@ -3,7 +3,6 @@ package com.innopolis.smoldyrev;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Hashtable;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
