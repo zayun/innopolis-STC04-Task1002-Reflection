@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Animal><field name="type" type="String" value="Собака"/><field name="name" type="String" value="Бобик"/><field name="age" type="Integer" value="6"/></Animal>
