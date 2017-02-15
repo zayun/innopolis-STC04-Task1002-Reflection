@@ -1,6 +1,9 @@
 package com.innopolis.smoldyrev;
 
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.io.Serializable;
 
 public class Human implements Serializable{
@@ -51,6 +54,23 @@ public class Human implements Serializable{
         try {
             dm.serializeXML(this,fileName);
         } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load(String fileName) {
+        DataManager dm = new DataManager();
+        try {
+            dm.deserializeXML(this,fileName);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
