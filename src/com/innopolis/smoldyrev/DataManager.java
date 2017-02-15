@@ -15,12 +15,9 @@ import java.lang.reflect.Field;
 import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document; // обратите внимание !
 
+import org.w3c.dom.Document;
 
-/**
- * Created by smoldyrev on 10.02.17.
- */
 public class DataManager {
 
     public static Object obj2;
@@ -30,36 +27,39 @@ public class DataManager {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         DOMImplementation impl = builder.getDOMImplementation();
-        Document doc = impl.createDocument(null,
-                null,
-                null);
+        Document doc = impl.createDocument(null, null, null);
 
         String fullClassName = obj.getClass().getTypeName();
-        String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.')+1,fullClassName.length());
+        String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1, fullClassName.length());
+
         Element e1 = doc.createElement(simpleClassName);
+
         doc.appendChild(e1);
         Field[] declaredFields = obj.getClass().getDeclaredFields();
 
+        /**Заполняем*/
         for (Field field :
                 declaredFields) {
+            Element e2 = doc.createElement("field");
             try {
-                field.setAccessible(true);;
-                Element e2 = doc.createElement("field");
-                e2.setAttribute("type",field.getType().getSimpleName());
-                e2.setAttribute("name",field.getName());
-                e2.setAttribute("value",field.get(obj).toString());
-                e1.appendChild(e2);
+                field.setAccessible(true);
+                e2.setAttribute("type", field.getType().getSimpleName());
+                e2.setAttribute("name", field.getName());
+                e2.setAttribute("value", field.get(obj).toString());
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+            e1.appendChild(e2);
         }
 
+        /**Сохраняем*/
         try {
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new FileOutputStream(fileName));
             TransformerFactory transFactory = TransformerFactory.newInstance();
             Transformer transformer = transFactory.newTransformer();
             transformer.transform(source, result);
+            System.out.println(fullClassName+" was serialized to "+fileName);
         } catch (TransformerException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -90,22 +90,21 @@ public class DataManager {
 
     public static void process(Node node, int level) {
 
-        if (node instanceof Element){
+        if (node instanceof Element) {
             Element element = (Element) node;
 
             NodeList nodeList = element.getElementsByTagName("field");
             int length = nodeList.getLength();
-            for (int i=0;i<length;++i) {
+            for (int i = 0; i < length; ++i) {
                 Element el = (Element) nodeList.item(i);
 
 
-                    System.out.println(el.getAttribute("value"));
-                    System.out.println(el.getAttribute("name"));
-                    //Field field = obj2.getClass().getField(el.getAttribute("name"));
-                    //field.set(obj2,el.getAttribute("value"));
+                //System.out.println(el.getAttribute("value"));
+                //System.out.println(el.getAttribute("name"));
+                //Field field = obj2.getClass().getField(el.getAttribute("name"));
+                //field.set(obj2,el.getAttribute("value"));
 
             }
         }
-        System.out.println();
     }
 }
